@@ -1,6 +1,5 @@
 export const constructQuery = (query: any) => {
 	const { username, language } = query
-	if (!username || !language) return
 
 	let languageQuery = ''
 	const isString = typeof language === 'string'
