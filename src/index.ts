@@ -5,30 +5,19 @@ import { constructQuery } from './helpers/query-helper'
 
 const app = express()
 
-app.set('view engine', 'pug');
-
-app.get('/authorization/received', async (req, res) => {
-	const { code } = req.query
-	await Api.authenticate(code)
-	res.render('confirmation')
-})
-
-app.get('/render', (req, res) => {
-	res.render('index', {
-			redirectUri: 'http://localhost:8080/confirmation/received',
-			clientId: Api.clientId
-	})
-})
-
 app.get('/', async (req, res) => {
-	const queryParams = constructQuery(req.query)
-	if (!queryParams) {
-			return res.status(400).send({ error: 'Missing query parameters.' })
+	const { language, username } = req.query
+
+	if ((!language || !username) || !language.length) {
+		return res.status(400).send({ error: 'Missing query parameters.' })
 	}
+
+	const queryParams = constructQuery({ language, username })
 	try {
 			const users = await Api.fetchUsers(queryParams)
-			if (!users.length) {
-					return res.send({ message: 'Sorry, no users were found that matched your search.' })
+			console.log({ users })
+			if (!users) {
+					return res.status(404).send({ message: 'Sorry, no users were found that matched your search.' })
 			}
 			res.send({ users })
 	} catch (e) {
@@ -36,6 +25,8 @@ app.get('/', async (req, res) => {
 	}
 })
 
-app.listen(8080, () => {
-	console.log('we in this')
-})
+const server = app.listen(8080)
+
+export default server
+
+process.on('SIGINT', () => process.exit(0))
