@@ -22,7 +22,8 @@ class GithubApi {
 
 					return Promise.all(items.map((user: any) => this.fetchUserFromUrl(user.url)))    
 			} catch (e) {
-				// what could possibly go wrong?
+				console.error(e)
+				throw(e)
 			}
 	}
 
