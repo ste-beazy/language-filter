@@ -13,24 +13,24 @@ class GithubApi {
 	}
 
 	async fetchUsers(query: string): Promise<RawUser[]> {
-			try {
-					const res: any = await timeout(this.timeoutLimit, fetch(`${this.base}/search/users?q=${query}&in:login&type=Users`, {
-							headers: this.headers
-					}))
-					const { items } = await res.json()
-					if (!items.length) return []
+		try {
+			const res: any = await timeout(this.timeoutLimit, fetch(`${this.base}/search/users?q=${query}&in:login&type=Users`, {
+					headers: this.headers
+			}))
+			const { items } = await res.json()
+			if (!items.length) return []
 
-					return Promise.all(items.map((user: any) => this.fetchUserFromUrl(user.url)))    
-			} catch (e) {
-				console.error(e)
-				throw(e)
-			}
+			return Promise.all(items.map((user: any) => this.fetchUserFromUrl(user.url)))    
+		} catch (e) {
+			console.error(e)
+			throw(e)
+		}
 	}
 
 	private async fetchUserFromUrl(url: string): Promise<RawUser> {
-			const res = await timeout(this.timeoutLimit, fetch(url, { headers: this.headers }))
-			const user = res.json()
-			return user
+		const res = await timeout(this.timeoutLimit, fetch(url, { headers: this.headers }))
+		const user = res.json()
+		return user
 	}
 }
 

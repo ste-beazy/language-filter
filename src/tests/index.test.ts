@@ -17,14 +17,16 @@ describe('API Endpoint(s)', () => {
 		})
 
 		it('Returns empty when none found', async () => {
-				scope.get('/search/users?q=meow+language:something&in:login&type=Users')
+			scope
+				.get('/search/users?q=meow+language:something&in:login&type=Users')
 				.reply(200, { items: [] })
 			const res = await request(app).get('/').query({ username: 'meow', language: 'something' })
 			expect(res.status).equals(404)
 		})
 
 		it('Returns single user for ', async () => {
-			scope.get('/search/users?q=test-username+language:python&in:login&type=Users')
+			scope
+				.get('/search/users?q=test-username+language:python&in:login&type=Users')
 				.reply(200, {
 					items: [{
 						url: 'https://api.github.com/users/alink'
