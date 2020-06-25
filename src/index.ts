@@ -1,7 +1,7 @@
 import express from 'express'
 
 import Api from './github/github-api'
-import { constructQuery } from './helpers/query-helper'
+import { constructQuery } from './helpers/'
 
 const app = express()
 
@@ -20,7 +20,10 @@ app.get('/', async (req, res) => {
 			}
 			res.send({ users })
 	} catch (e) {
-			res.status(400).send({ message: 'Something went wrong', error: {...e} })
+			res.status(500).send({
+				message: 'Something went wrong',
+				error: {...e}
+			})
 	}
 })
 
