@@ -15,8 +15,7 @@ app.get('/', async (req, res) => {
 	const queryParams = constructQuery({ language, username })
 	try {
 			const users = await Api.fetchUsers(queryParams)
-			console.log({ users })
-			if (!users) {
+			if (!users.length) {
 					return res.status(404).send({ message: 'Sorry, no users were found that matched your search.' })
 			}
 			res.send({ users })
