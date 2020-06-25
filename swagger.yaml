@@ -1,0 +1,61 @@
+swagger: "2.0"
+info:
+  description: "Searches for Github users that match username and language criteria"
+  version: "1.0.0"
+  title: "Language Filter API Swagger"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "localhost:8080"
+basePath: "/"
+tags:
+- name: "user"
+  description: "Github Users"
+schemes:
+- "http"
+paths:
+  /:
+    get:
+      tags:
+      - User
+      summary: Returns list of users matching the username and language
+      produces:
+      - application/json
+      parameters:
+        - name: username
+          in: query
+          description: Username to search for
+          type: string
+        - name: language
+          in: query
+          description: The lanaguge(s) to search for
+          type: string
+      responses:
+        200:
+          description: Returns list of users
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/User"
+        400:
+          description: Missing required query parameters
+        404:
+          description: No users found for that request
+        500:
+          description: Error when querying Github API
+definitions:
+  User:
+    type: object
+    properties:
+      username:
+        type: string
+      name:
+        type: string
+      followers:
+        type: number
+      publicRepos:
+        type: number
+      createdAt:
+        type: string
+      avatarUrl:
+        type: string
