@@ -1,6 +1,7 @@
 import fetch, { Headers } from 'node-fetch'
 
 import { timeout } from '../helpers/'
+import { RawUser } from '../types'
 
 class GithubApi {
 	public timeoutLimit: number
@@ -11,7 +12,7 @@ class GithubApi {
 			this.base = 'https://api.github.com'
 	}
 
-	async fetchUsers(query: string): Promise<any> {
+	async fetchUsers(query: string): Promise<RawUser[]> {
 			try {
 					const res: any = await timeout(this.timeoutLimit, fetch(`${this.base}/search/users?q=${query}&in:login&type=Users`, {
 							headers: this.headers
@@ -25,17 +26,10 @@ class GithubApi {
 			}
 	}
 
-	async fetchUserFromUrl(url: string) {
+	private async fetchUserFromUrl(url: string): Promise<RawUser> {
 			const res = await timeout(this.timeoutLimit, fetch(url, { headers: this.headers }))
-			const user = await res.json()
-			return {
-				avatarUrl: user.avatar_url,
-				username: user.login,
-				followers: user.followers,
-				name: user.name,
-				publicRepos: user.public_repos,
-				createdAt: user.created_at
-			}
+			const user = res.json()
+			return user
 	}
 }
 
