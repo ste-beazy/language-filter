@@ -35,14 +35,22 @@ describe('API Endpoint(s)', () => {
 					avatar_url: 'something',
 					login: 'test-username',
 					followers: 3,
-					name: 'test-username',
-					url: '/alink'
+					name: 'diana prince',
+					url: '/alink',
+					public_repos: 3,
+					created_at: new Date().toISOString()
 				})
 				
 			const res = await request(app).get('/').query({ username: 'test-username', language: 'python' })
 			expect(res.status).equals(200)
-			expect(res.body).haveOwnProperty('users')
-			expect(res.body.users).length(1)
+			expect(res.body).length(1)
+			expect(res.body[0]).property('publicRepos', 3)
+			expect(res.body[0]).property('avatarUrl', 'something')
+			expect(res.body[0]).property('followers', 3)
+			expect(res.body[0]).property('name', 'diana prince')
+			expect(res.body[0]).to.have.property('createdAt')
+			expect(res.body[0]).to.not.have.property('login')
+			expect(res.body[0]).to.not.have.property('url')
 		})
 	})
 })
